@@ -60,7 +60,7 @@ npm install prettier -D
 
 3.创建.prettierignore 忽略文件
 
-```
+```ignore
 /dist/*
 .local
 .output.js
@@ -122,7 +122,7 @@ npm i eslint-plugin-prettier eslint-config-prettier -D
 
 - 也就是我们希望保证代码仓库中的代码都是符合 eslint 规范的；
 
-- 那么我们需要在组员执行 `git commit ` 命令的时候对其进行校验，如果不符合 eslint 规范，那么自动通过规范进行修复；
+- 那么我们需要在组员执行 `git commit` 命令的时候对其进行校验，如果不符合 eslint 规范，那么自动通过规范进行修复；
 
 那么如何做到这一点呢？可以通过 Husky 工具：
 
@@ -133,7 +133,10 @@ npm i eslint-plugin-prettier eslint-config-prettier -D
 这里我们可以使用自动配置命令：
 
 ```shell
-npx husky-init && npm install
+npx husky-init && npm install       # npm
+npx husky-init && yarn              # Yarn 1
+yarn dlx husky-init --yarn2 && yarn # Yarn 2
+pnpm dlx husky-init && pnpm install # pnpm
 ```
 
 这里会做三件事：
@@ -144,7 +147,7 @@ npx husky-init && npm install
 
 2.在项目目录下创建 `.husky` 文件夹：
 
-```
+```husky
 npx huksy install
 ```
 
@@ -166,7 +169,7 @@ npx huksy install
 
 通常我们的 git commit 会按照统一的风格来提交，这样可以快速定位每次提交的内容，方便之后对版本进行控制。
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gsqw17gaqjj30to0cj3zp.jpg)
+![dd](https://tva1.sinaimg.cn/large/008i3skNgy1gsqw17gaqjj30to0cj3zp.jpg)
 
 但是如果每次手动来编写这些是比较麻烦的事情，我们可以使用一个工具：Commitizen
 
@@ -176,12 +179,14 @@ npx huksy install
 
 ```shell
 npm install commitizen -D
+yarn add commitizen -D
 ```
 
 2.安装 cz-conventional-changelog，并且初始化 cz-conventional-changelog：
 
 ```shell
 npx commitizen init cz-conventional-changelog --save-dev --save-exact
+npx commitizen init cz-conventional-changelog --yarn --dev --exact --force
 ```
 
 这个命令会帮助我们安装 cz-conventional-changelog：
@@ -190,7 +195,7 @@ npx commitizen init cz-conventional-changelog --save-dev --save-exact
 
 并且在 package.json 中进行配置：
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gsqvzftay5j30iu04k74d.jpg)
+![sa](https://tva1.sinaimg.cn/large/008i3skNgy1gsqvzftay5j30iu04k74d.jpg)
 
 这个时候我们提交代码需要使用 `npx cz`：
 
@@ -374,7 +379,7 @@ import { createStore } from "vuex";
 const store = createStore({
   state() {
     return {
-      name: "coderwhy"
+      name: "james"
     };
   }
 });
@@ -656,11 +661,11 @@ export default HYRequest;
 
 ## 三. 接口文档
 
-https://documenter.getpostman.com/view/12387168/TzsfmQvw
+<https://documenter.getpostman.com/view/12387168/TzsfmQvw>
 
 baseURL 的值：
 
-```
+```url
 http://152.136.185.210:5000
 ```
 
