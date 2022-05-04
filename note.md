@@ -408,125 +408,44 @@ Element Plus，一套为开发者、设计师和产品经理准备的基于 Vue 
 
 安装 element-plus
 
-```shell
-npm install element-plus
+```yarn
+yarn add element-plus
 ```
 
-#### 2.4.1. 全局引入
+#### 2.4.1. 按需引入
 
-一种引入 element-plus 的方式是全局引入，代表的含义是所有的组件和插件都会被自动注册：
+##### 自动导入
+
+首先你需要安装 unplugin-vue-components 和 unplugin-auto-import 这两款插件
+
+```yarn
+yarn add unplugin-vue-components unplugin-auto-import -D
+```
+
+然后把下列代码插入到你的`vue.config.js`中
 
 ```js
-import ElementPlus from "element-plus";
-import "element-plus/lib/theme-chalk/index.css";
+const { defineConfig } = require("@vue/cli-service");
 
-import router from "./router";
-import store from "./store";
+const AutoImport = require("unplugin-auto-import/webpack");
+const Components = require("unplugin-vue-components/webpack");
+const { ElementPlusResolver } = require("unplugin-vue-components/resolvers");
 
-createApp(App).use(router).use(store).use(ElementPlus).mount("#app");
-```
-
-#### 2.4.2. 局部引入
-
-也就是在开发中用到某个组件对某个组件进行引入：
-
-```vue
-<template>
-  <div id="app">
-    <router-link to="/login">登录</router-link>
-    <router-link to="/main">首页</router-link>
-    <router-view></router-view>
-
-    <h2>{{ $store.state.name }}</h2>
-
-    <el-button>默认按钮</el-button>
-    <el-button type="primary">主要按钮</el-button>
-    <el-button type="success">成功按钮</el-button>
-    <el-button type="info">信息按钮</el-button>
-    <el-button type="warning">警告按钮</el-button>
-    <el-button type="danger">危险按钮</el-button>
-  </div>
-</template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-
-import { ElButton } from "element-plus";
-
-export default defineComponent({
-  name: "App",
-  components: {
-    ElButton
+module.exports = defineConfig({
+  transpileDependencies: true,
+  outputDir: "./build",
+  configureWebpack: {
+    plugins: [
+      // ElementPlus按需自动引入
+      AutoImport({
+        resolvers: [ElementPlusResolver()]
+      }),
+      Components({
+        resolvers: [ElementPlusResolver()]
+      })
+    ]
   }
 });
-</script>
-
-<style lang="less"></style>
-```
-
-但是我们会发现是没有对应的样式的，引入样式有两种方式：
-
-- 全局引用样式（像之前做的那样）；
-- 局部引用样式（通过 babel 的插件）；
-
-  1.安装 babel 的插件：
-
-```shell
-npm install babel-plugin-import -D
-```
-
-2.配置 babel.config.js
-
-```js
-module.exports = {
-  plugins: [
-    [
-      "import",
-      {
-        libraryName: "element-plus",
-        customStyleName: (name) => {
-          return `element-plus/lib/theme-chalk/${name}.css`;
-        }
-      }
-    ]
-  ],
-  presets: ["@vue/cli-plugin-babel/preset"]
-};
-```
-
-但是这里依然有个弊端：
-
-- 这些组件我们在多个页面或者组件中使用的时候，都需要导入并且在 components 中进行注册；
-- 所以我们可以将它们在全局注册一次；
-
-```ts
-import {
-  ElButton,
-  ElTable,
-  ElAlert,
-  ElAside,
-  ElAutocomplete,
-  ElAvatar,
-  ElBacktop,
-  ElBadge
-} from "element-plus";
-
-const app = createApp(App);
-
-const components = [
-  ElButton,
-  ElTable,
-  ElAlert,
-  ElAside,
-  ElAutocomplete,
-  ElAvatar,
-  ElBacktop,
-  ElBadge
-];
-
-for (const cpn of components) {
-  app.component(cpn.name, cpn);
-}
 ```
 
 ### 2.5. axios 集成
