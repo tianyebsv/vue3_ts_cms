@@ -452,8 +452,8 @@ module.exports = defineConfig({
 
 安装 axios：
 
-```shell
-npm install axios
+```yarn
+yarn add axios
 ```
 
 封装 axios：

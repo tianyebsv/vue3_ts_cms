@@ -1,30 +1,37 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import HomeView from "@/views/HomeView.vue";
-
+import localCache from "@/utils/cache";
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
-    name: "home",
-    component: HomeView
-  },
-  {
-    path: "/home",
     redirect: "home"
   },
   {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+    path: "/home",
+    name: "home",
     component: () =>
-      import(/* webpackChunkName: "about" */ "@/views/AboutView.vue")
+      import(/* webpackChunkName: "home" */ "@/views/HomeView.vue")
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: () =>
+      import(/* webpackChunkName: "login" */ "@/views/login/LoginView.vue")
   }
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+});
+
+// 判断是否登录
+router.beforeEach((to) => {
+  if (to.path !== "/login") {
+    const token = localCache.getCache("token");
+    if (!token) {
+      return "/login";
+    }
+  }
 });
 
 export default router;
