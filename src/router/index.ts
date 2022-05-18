@@ -1,21 +1,31 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import localCache from "@/utils/cache";
+import localCache from "@/utils/localCache";
+import { firstMenuUrl } from "@/utils/mapMenus";
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
-    redirect: "home"
+    redirect: "main"
   },
   {
-    path: "/home",
-    name: "home",
+    path: "/main",
+    name: "main",
     component: () =>
-      import(/* webpackChunkName: "home" */ "@/views/HomeView.vue")
+      import(/* webpackChunkName: "main" */ "@/views/MainView.vue"),
+    children: []
   },
   {
     path: "/login",
     name: "login",
     component: () =>
       import(/* webpackChunkName: "login" */ "@/views/login/LoginView.vue")
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "notFound",
+    component: () =>
+      import(
+        /* webpackChunkName: "notFound" */ "@/views/not-found/NotFound.vue"
+      )
   }
 ];
 
@@ -30,6 +40,9 @@ router.beforeEach((to) => {
     const token = localCache.getCache("token");
     if (!token) {
       return "/login";
+    }
+    if (to.path === "/main") {
+      return firstMenuUrl;
     }
   }
 });

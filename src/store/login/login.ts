@@ -4,9 +4,11 @@ import {
   queryUserMenusByRoleId
 } from "@/service/login/login";
 import { Module } from "vuex";
-import { IRootState, ILoginState, UserInfo, UserMenu } from "./type";
-import localCache from "@/utils/cache";
+import { ILoginState, UserInfo, UserMenu } from "./type";
+import { IRootState } from "../type";
+import localCache from "@/utils/localCache";
 import router from "@/router";
+import { mapMenus } from "@/utils/mapMenus";
 
 const loginModule: Module<ILoginState, IRootState> = {
   namespaced: true,
@@ -28,6 +30,8 @@ const loginModule: Module<ILoginState, IRootState> = {
     },
     setUserMenu(state, userMenu: UserMenu) {
       state.userMenu = userMenu;
+      const routes = mapMenus(userMenu.data);
+      routes.forEach((route) => router.addRoute("main", route));
     }
   },
   actions: {
@@ -47,10 +51,17 @@ const loginModule: Module<ILoginState, IRootState> = {
       const userMenusResult = await queryUserMenusByRoleId(
         userInfoResult.data.role.id
       );
+      console.log(userMenusResult.data);
+      userMenusResult.data.map((item) => {
+        // 修改服务器返回icon字段的格式，以匹配新版elementPlus
+        item.icon = item.icon?.replace("el-icon-", "");
+      });
+      console.log(userMenusResult);
       commit("setUserMenu", userMenusResult);
+
       localCache.setCache("userMenu", userMenusResult);
       // 跳转首页
-      router.push("/home");
+      router.push("/main");
     },
     // 将缓存中的数据存放到vueX中，避免刷新没了
     loginLocal({ commit }) {

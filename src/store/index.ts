@@ -1,6 +1,6 @@
-import { createStore } from "vuex";
+import { createStore, Store, useStore } from "vuex";
 import login from "./login/login";
-import { IRootState } from "./login/type";
+import { IRootState, IStoreType } from "./type";
 
 const store = createStore<IRootState>({
   state() {
@@ -20,6 +20,11 @@ const store = createStore<IRootState>({
 // 初始化登录数据到vueX
 export function setupStore() {
   store.dispatch("login/loginLocal");
+  // store.dispatch("login/getRouteMenu");
+}
+
+export function useTyStore(): Store<IStoreType> {
+  return useStore();
 }
 
 export default store;

@@ -22,7 +22,7 @@ import { ref } from "vue";
 import { FormInst } from "naive-ui";
 import { useStore } from "vuex";
 
-import localCache from "@/utils/cache";
+import localCache from "@/utils/localCache";
 
 export default defineComponent({
   setup() {

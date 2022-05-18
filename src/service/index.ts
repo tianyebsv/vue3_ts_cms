@@ -1,5 +1,5 @@
 import TYRequest from "./request";
-import localCache from "@/utils/cache";
+import localCache from "@/utils/localCache";
 
 import { BASE_URL, TIME_OUT } from "./request/config";
 // 对外暴露的实例对象,service的统一出口
